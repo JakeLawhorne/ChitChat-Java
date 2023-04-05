@@ -18,6 +18,9 @@ public class SocketClient extends JFrame implements ActionListener, Runnable {
     BufferedReader br;
     PrintWriter pw;
 
+    JMenuItem update;
+    JMenuItem connect_List;
+
     public SocketClient() {
         super("Chit Chat");
         setFont(new Font("Arial Black", Font.PLAIN, 12));
@@ -30,24 +33,23 @@ public class SocketClient extends JFrame implements ActionListener, Runnable {
 
         textArea.setBackground(new Color(0, 0, 0));
 
-/*
-         JMenu helpMenu = new JMenu("Help");
-        JMenuItem update = new JMenuItem("Update Information");
-        JMenuItem connect_List = new JMenuItem("Visitor List");
+        JMenu helpMenu = new JMenu("Help");
+        update = new JMenuItem("Update Information");
+        connect_List = new JMenuItem("Visitor List");
 
         helpMenu.add(update);
         helpMenu.add(connect_List);
 
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
-*/
+
         getContentPane().add(jp, "Center");
         input_Text.setText("Enter your Message:");
         input_Text.setToolTipText("Enter your Message");
         input_Text.setForeground(new Color(0, 0, 0));
         input_Text.setFont(new Font("Tahoma", Font.BOLD, 11));
         input_Text.setBackground(new Color(230, 230, 250));
-        
+
         getContentPane().add(input_Text, "South");
         setSize(325, 411);
         setVisible(true);
@@ -57,6 +59,9 @@ public class SocketClient extends JFrame implements ActionListener, Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         input_Text.addActionListener(this); //Event registration
+        helpMenu.addActionListener(this);
+        update.addActionListener(this);
+        connect_List.addActionListener(this);
     }
 
     public void serverConnection() {
@@ -102,8 +107,12 @@ public class SocketClient extends JFrame implements ActionListener, Runnable {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String data = input_Text.getText();
-        pw.println(data); // Send to server side
-        input_Text.setText("");
+        if (e.getSource() == input_Text) {
+            String data = input_Text.getText();
+            pw.println(data); // Send to server side
+            input_Text.setText("");
+        } else if (e.getSource() == update) {
+
+        }
     }
 }

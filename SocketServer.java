@@ -11,7 +11,7 @@ public class SocketServer {
     ServerSocket server;
     Socket sk;
     InetAddress addr;
-    
+
     ArrayList<ServerThread> list = new ArrayList<ServerThread>();
 
     public SocketServer() {
@@ -77,8 +77,10 @@ class ServerThread extends Thread {
 
             String data;
             while((data = br.readLine()) != null ){
-                if(data == "/list"){
-                    pw.println("a");
+                if(data.equals("/list")){
+                    for(int i = 0; i < server.list.size(); i++){
+                        pw.println(server.list.get(i).name);
+                    }
                 }
                 server.broadCast("["+name+"] "+ data);
             }
