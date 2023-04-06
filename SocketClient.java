@@ -107,12 +107,8 @@ public class SocketClient extends JFrame implements ActionListener, Runnable {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == input_Text) {
             String data = input_Text.getText();
             pw.println(data); // Send to server side
             input_Text.setText("");
-        } else if (e.getSource() == update) {
-
-        }
     }
 }

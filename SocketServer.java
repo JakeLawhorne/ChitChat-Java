@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -47,9 +44,21 @@ public class SocketServer {
     public void broadCast(String message){
         for(ServerThread st : list){
             st.pw.println(message);
+            writeToFile(message);
         }
     }
 
+    public void writeToFile(String message){
+        BufferedWriter br;
+        try{
+            br = new BufferedWriter(new FileWriter("chat_history", true));
+            br.write(message);
+            br.newLine();
+            br.close();
+        }catch (IOException e){
+            throw new RuntimeException();
+        }
+    }
     public static void main(String[] args) {
         new SocketServer();
     }
@@ -81,6 +90,9 @@ class ServerThread extends Thread {
                     for(int i = 0; i < server.list.size(); i++){
                         pw.println(server.list.get(i).name);
                     }
+                } else if(data.equals("/update")){
+                    pw.println(readFile());
+
                 }
                 server.broadCast("["+name+"] "+ data);
             }
@@ -91,5 +103,21 @@ class ServerThread extends Thread {
             System.out.println(server.sk.getInetAddress()+" - ["+name+"] Exit");
             System.out.println(e + "---->");
         }
+    }
+
+    public String readFile(){
+        BufferedReader bufferedReader;
+        StringBuilder result = new StringBuilder();
+        try{
+            bufferedReader = new BufferedReader(new FileReader("chat_history"));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                result.append(bufferedReader.readLine() + "\n");
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return result.toString();
     }
 }
